@@ -1,0 +1,18 @@
+{
+  "name": "tron-playground",
+  "version": "1.0.0",
+  "description": "It containts some scripts to testing the Tron API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yonatan A Quintero R",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ts-node": "^10.9.2"
+  }
+}
