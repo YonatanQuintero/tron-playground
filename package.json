@@ -4,7 +4,7 @@
   "description": "It containts some scripts to testing the Tron API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node index.ts"
   },
   "author": "Yonatan A Quintero R",
   "license": "ISC",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
+    "tronweb": "^6.0.0-beta.4",
     "ts-node": "^10.9.2"
   }
 }
