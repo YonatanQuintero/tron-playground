@@ -10,10 +10,10 @@ export const NILE_USDT_CONTRACT = process.env.NILE_USDT_CONTRACT;
 export const USER_ADDRESS = process.env.USER_ADDRESS;
 export const USER_PRIVATE_KEY = process.env.USER_PRIVATE_KEY;
 
-export const getTronWeb = (): TronWeb => {
+export const getTronWeb = (privateKey?: string): TronWeb => {
     return new TronWeb({
         fullHost: "https://nile.trongrid.io",
-        privateKey: TRON_PRIVATE_KEY,
+        privateKey: privateKey || TRON_PRIVATE_KEY,
         headers: { "TRON-PRO-API-KEY": TRON_API_KEY }
     });
 }
