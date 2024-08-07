@@ -6,8 +6,8 @@ import { sendUsdt } from "./src/send-usdt";
 
 const main = async () => {
     //  await estimateResources();
-    // await resourcesDelegation();
-    await sendUsdt();
+    // await sendUsdt();
+    await resourcesDelegation();
 }
 
 
