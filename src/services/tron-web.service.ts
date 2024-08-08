@@ -32,7 +32,7 @@ export class TronWebService {
         console.log(`Tron Full node is connected`)
         console.log(`Tron Solidity node is connected`)
         console.log(`Tron Event server is connected`)
-        console.log(`Connected to ${tronWeb.fullNode} (${tronWeb.version})`);
+        console.log(`Connected to ${tronWeb.fullNode.host}. Tronweb V. ${tronWeb.version}`);
 
         return true;
     }

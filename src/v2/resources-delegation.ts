@@ -26,11 +26,15 @@ export const resourcesDelegation = async (): Promise<void> => {
     }
 
     const mainTronWeb = await TronWebService.create();
+    await TronWebService.checkConnection(mainTronWeb);
+
     const userTronWeb = await TronWebService.create(userPrivateKey);
+    await TronWebService.checkConnection(userTronWeb);
+
     const userTheterService = new TheterService(userTronWeb, usdtContract);
     const amountInSun = await userTheterService.getBalanceInSun(userAddress);
     const resources = await userTheterService.getTransferResources(mainAddress, amountInSun);
-    await sendTrxToBurn(resources.trxToBurn, userAddress, mainTronWeb, mainAddress, userTheterService);
+    await sendTrxToBurn(resources.trxToBurn, userAddress, mainTronWeb, userTheterService);
     await sendUsdtToMainWallet(userAddress, mainAddress, userTheterService, amountInSun);
 }
 
@@ -51,11 +55,11 @@ async function sendUsdtToMainWallet(
 }
 
 async function sendTrxToBurn(
-    amountInTrx: number, userAddress: string, tronWeb: TronWeb, mainAddress: string, theterService: TheterService
+    amountInTrx: number, userAddress: string, tronWeb: TronWeb, theterService: TheterService
 ): Promise<void> {
     if (amountInTrx > 0) {
         console.log(`Sending ${amountInTrx} TRX to ${userAddress}...`);
-        const broadcastedTx = await tronWeb.trx.sendTrx(mainAddress, amountInTrx);
+        const broadcastedTx = await tronWeb.trx.sendTrx(userAddress, Number(tronWeb.toSun(amountInTrx)));
         if (!broadcastedTx.result) {
             console.error(broadcastedTx);
             throw new Error("Failed transaction to send trx");
