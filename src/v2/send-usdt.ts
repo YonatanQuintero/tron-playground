@@ -3,32 +3,30 @@ import { TheterService } from "../services/theter.service";
 import { TronWebService } from "../services/tron-web.service";
 import { TronService } from "../services/tron.service";
 
-export const estimateResources = async () => {
-
-    const {
-        usdtContract,
-        userAddress
-    } = validateAndRetrieveConfig();
+export const sendUsdt = async (): Promise<void> => {
+    const { usdtContract, userAddress } = validateAndRetrieveConfig();
 
     const tronWeb = await TronWebService.create();
     await TronWebService.checkConnection(tronWeb);
     const tronService = new TronService(tronWeb);
     const theterService = new TheterService(tronService, usdtContract);
-    const resources = await theterService.getTransferResources(
-        userAddress, Number(tronWeb.toSun(1.1988))
-    );
-
-    console.log("Estimated Energy: ", resources.estimatedEnergy);
-    console.log("Estimated Bandwidth: ", resources.estimatedBandwidth);
-    console.log("TRX to Burn: ", resources.trxToBurn);
+    console.log("Sending USDT to user address:", userAddress);
+    const broadcastedTx = await theterService.transfer(userAddress, Number(tronWeb.toSun(1.1988)));
+    if (!broadcastedTx.result) {
+        console.error(broadcastedTx);
+        throw new Error("Failed to send transaction");
+    }
+    const txInfo = await tronService.getTransactionInfo(broadcastedTx.transaction.txID);
+    console.log(txInfo);
+    console.log("Confirmed:", txInfo?.receipt.result);
 }
 
-type EstimateResourcesConfig = {
+type SendUsdtConfig = {
     usdtContract: string;
     userAddress: string;
 };
 
-const validateAndRetrieveConfig = (): EstimateResourcesConfig => {
+const validateAndRetrieveConfig = (): SendUsdtConfig => {
 
     const usdtContract = NILE_USDT_CONTRACT;
     if (!usdtContract) {
