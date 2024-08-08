@@ -3,13 +3,15 @@ import { TronService } from "./tron.service";
 import { BroadcastReturn, ContractParamter, SignedTransaction, Transaction } from "tronweb/lib/esm/types";
 import { Resources } from "../types/resources.type";
 
-export class TheterService extends TronService {
+export class TheterService {
+
+    private readonly tronWeb: TronWeb;
 
     constructor(
-        protected readonly tronWeb: TronWeb,
-        private readonly contractAddress: string
+        private readonly tronService: TronService,
+        private readonly contractAddress: string,
     ) {
-        super(tronWeb);
+        this.tronWeb = tronService.getTronWeb();
     }
 
     async getBalanceInSun(address: string): Promise<number> {
@@ -41,7 +43,7 @@ export class TheterService extends TronService {
     }
 
     async getTransferResources(address: string, amountInSun: number): Promise<Resources> {
-        return await this.getResources(
+        return await this.tronService.getResources(
             this.contractAddress,
             "transfer(address,uint256)",
             [{

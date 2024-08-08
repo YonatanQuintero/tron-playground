@@ -3,7 +3,7 @@ import { Resources } from "../types/resources.type";
 import { SignedTransaction, TransactionInfo } from "tronweb/lib/esm/types";
 
 export class TronService {
-    constructor(protected readonly tronWeb: TronWeb) { }
+    constructor(private readonly tronWeb: TronWeb) { }
 
     /**
      * Calculates the estimated energy, bandwidth, and TRX to burn for a given TronWeb transaction.
@@ -100,5 +100,14 @@ export class TronService {
         const trxForBandwidth = (requiredBandwidth * bandwidthFee) / 1000000;
         return trxForEnergy + trxForBandwidth;
 
+    }
+
+    /**
+     * Retrieves the TronWeb instance used by the TronService.
+     *
+     * @returns The TronWeb instance.
+     */
+    getTronWeb(): TronWeb {
+        return this.tronWeb;
     }
 }
