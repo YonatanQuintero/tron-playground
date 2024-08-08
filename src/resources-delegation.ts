@@ -1,7 +1,6 @@
 import { TransactionInfo } from "tronweb/lib/esm/types";
 import { getTronWeb, NILE_USDT_CONTRACT, TRON_ADDRESS, USER_ADDRESS } from "../config";
-import { TronWeb } from "tronweb";
-import { estimateResources } from "./estimate-resources";
+import { BigNumber, TronWeb } from "tronweb";
 import { CalculateResources } from "./calculate-resources";
 
 export const resourcesDelegation = async (): Promise<void> => {
@@ -34,12 +33,12 @@ export const resourcesDelegation = async (): Promise<void> => {
     const mainTronWeb = getTronWeb();
     const userTronWeb = getTronWeb(userPrivateKey);
     const functionSelector = "transfer(address,uint256)";
-    // const amount = getbalance() TODO: Get actual balance
+    const amountInSun = Number(await getUsdtBalanceInSun(mainTronWeb, userAddress, usdtContract));
+    
     const parameters = [
         { type: "address", value: mainAddress },
-        { type: "uint256", value: mainTronWeb.toSun(1.198805) }
+        { type: "uint256", value: amountInSun }
     ];
-
 
     const tx = await userTronWeb.transactionBuilder.triggerSmartContract(
         usdtContract,
@@ -47,7 +46,7 @@ export const resourcesDelegation = async (): Promise<void> => {
         {},
         [
             { type: "address", value: mainAddress },
-            { type: "uint256", value: userTronWeb.toSun(1.198805) }
+            { type: "uint256", value: amountInSun }
         ]
     );
 
@@ -65,14 +64,14 @@ export const resourcesDelegation = async (): Promise<void> => {
     }
 
     console.log(`Sending USDT from ${userAddress} to ${mainAddress}...`);
-    
+
     const tx2 = await userTronWeb.transactionBuilder.triggerSmartContract(
         usdtContract,
         "transfer(address,uint256)",
         {},
         [
             { type: "address", value: mainAddress },
-            { type: "uint256", value: userTronWeb.toSun(1.198805) }
+            { type: "uint256", value: amountInSun }
         ]
     );
 
@@ -113,4 +112,12 @@ async function getTransactionInfo(txId: string, tronweb: TronWeb): Promise<Trans
     } while (Object.keys(transactionInfo).length === 0 && count <= tries);
 
     return Object.keys(transactionInfo).length === 0 ? null : transactionInfo as TransactionInfo;
+}
+
+async function getUsdtBalanceInSun(
+    tronWeb: TronWeb, address: string, contractAddress: string
+): Promise<string | BigNumber> {
+    const contract = await tronWeb.contract().at(contractAddress);
+    return await contract.balanceOf(address).call();
+ 
 }
