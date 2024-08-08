@@ -1,13 +1,13 @@
 import { getTronWeb, NILE_USDT_CONTRACT, USER_ADDRESS } from "./config";
 import { CalculateResources } from "./src/calculate-resources";
-import { estimateResources } from "./src/estimate-resources";
+import { estimateResources } from "./src/v2/estimate-resources";
 import { resourcesDelegation } from "./src/v2/resources-delegation";
 import { sendUsdt } from "./src/send-usdt";
 
 const main = async () => {
-    //  await estimateResources();
+    await estimateResources();
     // await sendUsdt();
-    await resourcesDelegation();
+    // await resourcesDelegation();
 }
 
 
