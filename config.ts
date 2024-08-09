@@ -1,5 +1,4 @@
 import * as dotenv from "dotenv";
-import { TronWeb } from "tronweb";
 
 dotenv.config();
 
@@ -10,11 +9,3 @@ export const NILE_USDT_CONTRACT = process.env.NILE_USDT_CONTRACT;
 export const USER_ADDRESS = process.env.USER_ADDRESS;
 export const USER_PRIVATE_KEY = process.env.USER_PRIVATE_KEY;
 export const DEFAULT_FULL_HOST = "https://nile.trongrid.io";
-
-export const getTronWeb = (privateKey?: string): TronWeb => {
-    return new TronWeb({
-        fullHost: "https://nile.trongrid.io",
-        privateKey: privateKey || TRON_PRIVATE_KEY,
-        headers: { "TRON-PRO-API-KEY": TRON_API_KEY }
-    });
-}
