@@ -1,4 +1,4 @@
-# Tron Blockchain Application
+# Tron Playground Application
 
 This project is a TypeScript application that interacts with the Tron blockchain using the `tronweb` library. The application demonstrates various functionalities related to Tron blockchain operations, such as estimating resources, sending USDT tokens, and managing resources delegation.
 
@@ -15,7 +15,7 @@ This project is a TypeScript application that interacts with the Tron blockchain
 The project's structure is as follows:
 
 ```
-tron-blockchain-app/
+tron-playground/
 ├── config.ts
 ├── package-lock.json
 ├── package.json
@@ -40,8 +40,8 @@ tron-blockchain-app/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/tron-blockchain-app.git
-cd tron-blockchain-app
+git clone https://github.com/YonatanQuintero/tron-playground.git
+cd tron-playground
 ```
 
 2. Install dependencies:

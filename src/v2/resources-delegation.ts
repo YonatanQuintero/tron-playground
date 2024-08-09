@@ -15,7 +15,7 @@ import { TronService } from "../services/tron.service";
  *
  * @remarks
  * This function retrieves necessary configuration settings, creates TronWeb instances,
- * and initiates the delegation process by sending USDT and TRX to the main wallet.
+ * and initiates the delegation process by sending TRX to user wallet and send USDT to the main wallet.
  */
 export const resourcesDelegation = async (): Promise<void> => {
 
