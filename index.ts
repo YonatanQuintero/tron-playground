@@ -3,7 +3,7 @@ import { resourcesDelegation } from "./src/v2/resources-delegation";
 import { sendUsdt } from "./src/v2/send-usdt";
 
 const main = async () => {
-    await estimateResources();
+     await estimateResources();
     // await sendUsdt();
     // await resourcesDelegation();
 }

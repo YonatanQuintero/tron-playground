@@ -1,3 +1,4 @@
+import { TronWeb } from "tronweb";
 import { NILE_USDT_CONTRACT, USER_ADDRESS } from "../../config";
 import { TheterService } from "../services/theter.service";
 import { TronWebService } from "../services/tron-web.service";
@@ -10,15 +11,7 @@ export const sendUsdt = async (): Promise<void> => {
     await TronWebService.checkConnection(tronWeb);
     const tronService = new TronService(tronWeb);
     const theterService = new TheterService(tronService, usdtContract);
-    console.log("Sending USDT to user address:", userAddress);
-    const broadcastedTx = await theterService.transfer(userAddress, Number(tronWeb.toSun(1.1988)));
-    if (!broadcastedTx.result) {
-        console.error(broadcastedTx);
-        throw new Error("Failed to send transaction");
-    }
-    const txInfo = await tronService.getTransactionInfo(broadcastedTx.transaction.txID);
-    console.log(txInfo);
-    console.log("Confirmed:", txInfo?.receipt.result);
+    await transferUsdt(userAddress, theterService, tronWeb, tronService);
 }
 
 type SendUsdtConfig = {
@@ -40,3 +33,20 @@ const validateAndRetrieveConfig = (): SendUsdtConfig => {
 
     return { usdtContract, userAddress };
 };
+
+async function transferUsdt(
+    userAddress: string,
+    theterService: TheterService,
+    tronWeb: TronWeb,
+    tronService: TronService
+) {
+    console.log("Sending USDT to user address:", userAddress);
+    const broadcastedTx = await theterService.transfer(userAddress, Number(tronWeb.toSun(1.1988)));
+    if (!broadcastedTx.result) {
+        console.error(broadcastedTx);
+        throw new Error("Failed to send transaction");
+    }
+    const txInfo = await tronService.getTransactionInfo(broadcastedTx.transaction.txID);
+    console.log(txInfo);
+    console.log("Confirmed:", txInfo?.receipt.result);
+}
