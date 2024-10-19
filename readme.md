@@ -61,24 +61,68 @@ USER_ADDRESS=another_user_address
 USER_PRIVATE_KEY=user_address_private_key
 ```
 
-4. Run the application:
+### 4. Run the Application
+
+Execute specific tasks using the CLI script `index.ts` with `ts-node`:
 
 ```bash
-npm start
+npx ts-node index.ts <task> [additionalTasks...]
 ```
 
-## Available Scripts
+**Examples:**
 
-In the project directory, you can run:
+- **Execute a Single Task:**
 
-- `npm start`: Runs the application in development mode.
+  ```bash
+  npx ts-node index.ts estimateResources
+  ```
+
+- **Execute Multiple Tasks:**
+
+  ```bash
+  npx ts-node index.ts estimateResources sendUsdt
+  ```
+
+- **Execute All Tasks:**
+
+  ```bash
+  npx ts-node index.ts estimateResources sendUsdt resourcesDelegation
+  ```
+
+**Alternative Execution Method:**
+
+If you prefer running the script directly without specifying `ts-node` each time, you can add execution permissions (on Unix-like systems) and run the script as follows:
+
+1. **Make the Script Executable:**
+
+   ```bash
+   chmod +x index.ts
+   ```
+
+2. **Run the Script:**
+
+   ```bash
+   ./index.ts <task> [additionalTasks...]
+   ```
+
+**Note:** Ensure that `ts-node` is installed either globally or as a development dependency in your project for the above method to work.
 
 ## Key Features
 
-- Estimate resources: The `estimate-resources.ts` file demonstrates how to estimate the required resources for a transaction.
-- Send USDT tokens: The `send-usdt.ts` file shows how to send USDT tokens to a specified address.
-- Manage resources delegation: The `resources-delegation.ts` file demonstrates how to delegate resources from main wallet to user wallet adn then send user transaction.
+- **Estimate Resources**: The `estimate-resources.ts` file demonstrates how to estimate the required resources for a Tron transaction.
+  
+- **Send USDT Tokens**: The `send-usdt.ts` file shows how to send USDT tokens to a specified address.
+  
+- **Manage Resources Delegation**: The `resources-delegation.ts` file demonstrates how to delegate resources from the main wallet to a user wallet and send user transactions.
+  
+- **Command-Line Interface (CLI)**: The `index.ts` script allows executing specific tasks based on command-line arguments, enhancing flexibility and control.
+  
+- **TypeScript Support**: Leveraging TypeScript ensures type safety and better tooling support, improving code reliability and maintainability.
+  
+- **Modular Architecture**: Organized with a clear directory structure, separating services, types, and tasks for better code management.
 
 ## License
 
 This project is licensed under the ISC License.
+
+---
