@@ -5,7 +5,7 @@
  */
 
 import { TronWeb } from "tronweb";
-import { NILE_USDT_CONTRACT, TRON_ADDRESS, USER_ADDRESS, USER_PRIVATE_KEY } from "../../config";
+import { DEFAULT_USDT_CONTRACT, TRON_ADDRESS, USER_ADDRESS, USER_PRIVATE_KEY } from "../../config";
 import { TheterService } from "../services/theter.service";
 import { TronWebService } from "../services/tron-web.service";
 import { TronService } from "../services/tron.service";
@@ -126,7 +126,7 @@ const validateAndRetrieveConfig = (): ResourcesDelegationConfig => {
         throw new Error("Missing main wallet address");
     }
 
-    const usdtContract = NILE_USDT_CONTRACT;
+    const usdtContract = DEFAULT_USDT_CONTRACT;
     if (!usdtContract) {
         throw new Error("Missing usdt contract");
     }

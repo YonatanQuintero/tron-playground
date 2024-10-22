@@ -1,5 +1,5 @@
 import { TronWeb } from "tronweb";
-import { NILE_USDT_CONTRACT, USER_ADDRESS } from "../../config";
+import { DEFAULT_USDT_CONTRACT, USER_ADDRESS } from "../../config";
 import { TheterService } from "../services/theter.service";
 import { TronWebService } from "../services/tron-web.service";
 import { TronService } from "../services/tron.service";
@@ -21,7 +21,7 @@ type SendUsdtConfig = {
 
 const validateAndRetrieveConfig = (): SendUsdtConfig => {
 
-    const usdtContract = NILE_USDT_CONTRACT;
+    const usdtContract = DEFAULT_USDT_CONTRACT;
     if (!usdtContract) {
         throw new Error("Missing usdt contract");
     }
