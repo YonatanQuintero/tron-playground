@@ -14,8 +14,21 @@ export const estimateResources = async () => {
     await TronWebService.checkConnection(tronWeb);
     const tronService = new TronService(tronWeb);
     const theterService = new TheterService(tronService, usdtContract);
+    const callerAddress = tronWeb.defaultAddress.base58;
+
+    if (!callerAddress) {
+        throw new Error("Failed to get caller address");
+    }
+
+    const callerBalance = await theterService.getBalanceInDecimal(callerAddress);
+    const balanceToSend = 1.1988;
+
+    if (balanceToSend > callerBalance) {
+        throw new Error("Insufficient balance");
+    }
+
     const resources = await theterService.getTransferResources(
-        userAddress, Number(tronWeb.toSun(1.1988))
+        userAddress, Number(tronWeb.toSun(balanceToSend))
     );
 
     console.log("Estimated Energy: ", resources.estimatedEnergy);
