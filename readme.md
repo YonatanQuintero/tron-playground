@@ -17,7 +17,6 @@ The project's structure is as follows:
 ```
 tron-playground/
 ├── config.ts
-├── package-lock.json
 ├── package.json
 ├── README.md
 ├── src/
@@ -56,10 +55,19 @@ npm install
 TRON_ADDRESS=your_tron_address
 TRON_PRIVATE_KEY=tron_address_private_key
 TRON_API_KEY=your_tron_pro_api_key
-NILE_USDT_CONTRACT=nile_usdt_contract
 USER_ADDRESS=another_user_address
 USER_PRIVATE_KEY=user_address_private_key
+DEFAULT_FULL_HOST=tron_network
+DEFAULT_USDT_CONTRACT=contract_address
 ```
+
+### Network Selection
+
+| Network        | URL                                                              | USDT Contract                      |
+| -------------- | ---------------------------------------------------------------- | ---------------------------------- |
+| Mainnet        | [https://api.trongrid.io](https://api.trongrid.io)               | TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t |
+| Shasta Testnet | [https://api.shasta.trongrid.io](https://api.shasta.trongrid.io) | TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs |
+| Nile Testnet   | [https://nile.trongrid.io](https://nile.trongrid.io)             | TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj |
 
 ### 4. Run the Application
 
@@ -69,24 +77,30 @@ Execute specific tasks using the CLI script `index.ts` with `ts-node`:
 npx ts-node index.ts <task> [additionalTasks...]
 ```
 
+Or execute the npm script
+
+```bash
+npm start <task> [additionalTasks...]
+```
+
 **Examples:**
 
 - **Execute a Single Task:**
 
   ```bash
-  npx ts-node index.ts estimateResources
+  npm start estimateResources
   ```
 
 - **Execute Multiple Tasks:**
 
   ```bash
-  npx ts-node index.ts estimateResources sendUsdt
+  npm start estimateResources sendUsdt
   ```
 
 - **Execute All Tasks:**
 
   ```bash
-  npx ts-node index.ts estimateResources sendUsdt resourcesDelegation
+  npm start estimateResources sendUsdt resourcesDelegation
   ```
 
 **Alternative Execution Method:**
@@ -110,15 +124,10 @@ If you prefer running the script directly without specifying `ts-node` each time
 ## Key Features
 
 - **Estimate Resources**: The `estimate-resources.ts` file demonstrates how to estimate the required resources for a Tron transaction.
-  
 - **Send USDT Tokens**: The `send-usdt.ts` file shows how to send USDT tokens to a specified address.
-  
 - **Manage Resources Delegation**: The `resources-delegation.ts` file demonstrates how to delegate resources from the main wallet to a user wallet and send user transactions.
-  
 - **Command-Line Interface (CLI)**: The `index.ts` script allows executing specific tasks based on command-line arguments, enhancing flexibility and control.
-  
 - **TypeScript Support**: Leveraging TypeScript ensures type safety and better tooling support, improving code reliability and maintainability.
-  
 - **Modular Architecture**: Organized with a clear directory structure, separating services, types, and tasks for better code management.
 
 ## License
