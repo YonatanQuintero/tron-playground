@@ -9,6 +9,7 @@ import { DEFAULT_USDT_CONTRACT, TRON_ADDRESS, USER_ADDRESS, USER_PRIVATE_KEY } f
 import { TheterService } from "../services/theter.service";
 import { TronWebService } from "../services/tron-web.service";
 import { TronService } from "../services/tron.service";
+import BigNumber from "bignumber.js"
 
 /**
  * Performs the resources delegation process.
@@ -34,7 +35,8 @@ export const resourcesDelegation = async (): Promise<void> => {
 
     const userTronService = new TronService(userTronWeb);
     const userTheterService = new TheterService(userTronService, usdtContract);
-    const amountInSun = await userTheterService.getBalanceInSun(userAddress);
+    //const amountInSun = await userTheterService.getBalanceInSun(userAddress);
+    const amountInSun = Number(mainTronWeb.toSun(1));
     const resources = await userTheterService.getTransferResources(mainAddress, amountInSun);
     await sendTrxToBurn(
         resources.trxToBurn, userAddress, mainTronWeb, userTronService
@@ -69,7 +71,6 @@ async function sendUsdtToMainWallet(
     }
 
     const txInfo = await tronService.getTransactionInfo(broadcastedTx.transaction.txID);
-    console.log(txInfo);
     console.log("Status:", txInfo?.receipt.result);
 }
 
@@ -87,19 +88,44 @@ async function sendTrxToBurn(
     tronWeb: TronWeb,
     tronService: TronService
 ): Promise<void> {
-    if (amountInTrx > 0) {
-        console.log(`Sending ${amountInTrx} TRX to ${userAddress}...`);
-        const broadcastedTx = await tronWeb.trx.sendTrx(
-            userAddress, Number(tronWeb.toSun(amountInTrx))
-        );
-        if (!broadcastedTx.result) {
-            console.error(broadcastedTx);
-            throw new Error("Failed transaction to send trx");
+    try {
+        if (amountInTrx > 0) {
+
+            console.log(`Sending ${amountInTrx} TRX to ${userAddress}...`);
+
+            // Check sender's balance
+            const senderAddress = tronWeb.defaultAddress.base58;
+            const senderBalanceSun = await tronWeb.trx.getBalance(senderAddress);
+            const senderBalanceTrx = new BigNumber(senderBalanceSun).dividedBy(1e6);
+
+            console.log(`Sender's TRX Balance: ${senderBalanceTrx.toString()} TRX`);
+
+            if (senderBalanceTrx.isLessThan(amountInTrx)) {
+                throw new Error(
+                    `Insufficient TRX balance. Available: ${senderBalanceTrx.toString()} TRX,Required: ${amountInTrx} TRX.`
+                );
+            }
+
+            // Calculate amount in sun using BigNumber
+            const amountInSun = new BigNumber(amountInTrx)
+                .multipliedBy(1e6)
+                .integerValue(BigNumber.ROUND_FLOOR);
+
+            const broadcastedTx = await tronWeb.trx.sendTrx(
+                userAddress, amountInSun.toNumber()
+            );
+
+            if (!broadcastedTx.result) {
+                console.error(broadcastedTx);
+                throw new Error("Failed transaction to send trx");
+            }
+            const txInfo = await tronService.getTransactionInfo(
+                broadcastedTx.transaction.txID
+            );
         }
-        const txInfo = await tronService.getTransactionInfo(
-            broadcastedTx.transaction.txID
-        );
-        console.log(txInfo);
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
 }
 
